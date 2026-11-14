@@ -14,15 +14,19 @@
 </head>
 <body>
 <div>
-  <h1>Conectado con Canva</h1>
+  <h1 id="titulo">Conectado</h1>
   <p>Si la app no se abre sola, pulsa el botón.</p>
   <a id="volver" href="#">Volver a Art Of IA</a>
 </div>
 <script>
-  // Reenvía el código de Canva a la app con el esquema artofia://
+  // Reenvía el código a la app con el esquema artofia://
+  // El login de TikTok usa un «state» que empieza por «tt»; el de Canva, no.
   var q = window.location.search;
-  var esquema = 'artofia://canva' + q;
-  var intento = 'intent://canva' + q + '#Intent;scheme=artofia;package=com.artofia.gestor;end';
+  var st = (new URLSearchParams(q)).get('state') || '';
+  var red = st.indexOf('tt') === 0 ? 'tiktok' : 'canva';
+  document.getElementById('titulo').textContent = red === 'tiktok' ? 'Conectado con TikTok' : 'Conectado con Canva';
+  var esquema = 'artofia://' + red + q;
+  var intento = 'intent://' + red + q + '#Intent;scheme=artofia;package=com.artofia.gestor;end';
   document.getElementById('volver').href = /Android/i.test(navigator.userAgent) ? intento : esquema;
   setTimeout(function () { window.location.href = document.getElementById('volver').href; }, 300);
 </script>
